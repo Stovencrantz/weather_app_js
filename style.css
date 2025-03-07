@@ -1,0 +1,23 @@
+#header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 3rem;
+  background-color: grey;
+  color: white;
+}
+
+.col {
+  border-style: solid;
+  border-color: black;
+  border-radius: 10px;
+  border-width: 5px;
+}
+
+form {
+  display: block;
+}
+
+.fiveDayCard {
+  padding: 1rem;
+}

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="Description" content="Enter your description here" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet"
+    href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css
+    />
+    <link rel="stylesheet" href="/style.css" />
+    <title>Weather App JS</title>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row" id="header">Weather Dashboard</div>
+
+      <div class="row my-3">
+        <div class="col-md-4">
+          <!-- City search form -->
+          <form action="">
+            <label for="cityInput" class="form-label">Search for a City</label>
+            <div style="display: flex">
+              <input type="text" class="form-control" id="cityInput" />
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-solid fa-magnifying-glass"></i>
+              </button>
+            </div>
+          </form>
+
+          <ul class="list-group" id="pastSearches">
+            <!-- Previous City list -->
+            <!-- pull from local storage -->
+            <li class="list-group-item">Text 1</li>
+            <li class="list-group-item">Text 2</li>
+            <li class="list-group-item">Text 3</li>
+            <li class="list-group-item">Text 4</li>
+            <li class="list-group-item">Text 5</li>
+          </ul>
+        </div>
+        <div class="col-md-8">
+          <div class="row">
+            <div class="col-md-12">
+              <!-- City & Current Date Results -->
+              <div class="card" id="todayForcast">
+                <div class="card-body">
+                  <h5 class="card-title">
+                    <span id="city">Denver</span> (<span id="date"
+                      >12/24/2025</span
+                    >)
+                    <span id="weatherIcon"
+                      ><i class="fa-solid fa-cloud"></i
+                    ></span>
+                  </h5>
+                  <p class="card-text">Temperature:<span id="temp"></span></p>
+                  <p class="card-text">Humidity: <span id="humidity"></span></p>
+                  <p class="card-text">
+                    Wind Speed: <span id="windSpeed"></span>
+                  </p>
+                  <p class="card-text">UV Index: <span id="uvIndex"></span></p>
+                </div>
+              </div>
+              <!--                             -->
+            </div>
+            <div class="row my-3" id="fiveDayForecast">
+              <div class="col-md-2">
+                <!-- 5 Day Forecast -->
+                <div class="card fiveDayCard">
+                  <h3 class="card-title">Date</h3>
+                  <p><i class="fas fa-solid fa-cloud"></i></p>
+                  <p class="card-text">Temp: 50</p>
+                  <p class="card-text">Humidity: 99</p>
+                </div>
+              </div>
+              <!--                -->
+              <div class="col-md-2">
+                <!-- 5 Day Forecast -->
+                <div class="card fiveDayCard">
+                  <h3 class="card-title">Date</h3>
+                  <p><i class="fas fa-solid fa-cloud"></i></p>
+                  <p class="card-text">Temp: 50</p>
+                  <p class="card-text">Humidity: 99</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="./script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/js/bootstrap.min.js"></script>
+  </body>
+</html>
