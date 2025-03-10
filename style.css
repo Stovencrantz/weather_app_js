@@ -1,16 +1,20 @@
+body {
+  background-color: #fff8f0;
+}
+
 #header {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 3rem;
-  background-color: grey;
+  background-color: #767522;
   color: white;
 }
 
 .col {
   border-style: solid;
   border-color: black;
-  border-radius: 10px;
+  border-radius: 50px;
   border-width: 5px;
 }
 
