@@ -20,6 +20,10 @@ const submitBtn = document.getElementById("submitBtn");
 const cityEl = document.getElementById("city");
 const dateEl = document.getElementById("date");
 const weatherIconEl = document.getElementById("weatherIcon");
+const tempEl = document.getElementById("temp");
+const humidityEl = document.getElementById("humidity");
+const windSpeedEl = document.getElementById("windSpeed");
+const uvIndexEl = document.getElementById("uvIndex");
 const pastSearchesEl = document.getElementById("pastSearches");
 const fiveDayForecastRow = document.getElementById("fiveDayForecast");
 const specialCharacters = [
@@ -59,13 +63,31 @@ const specialCharacters = [
 const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 const api_key = localStorage.getItem("openweather_key");
 
+const searches = {
+  history: [],
+  getHistory: function () {
+    // get previous searches & render on load
+  },
+  appendHistory: function (city) {
+    // append most recent search to localStorage
+    this.history.push(city);
+    localStorage.setItem("searchHistory", JSON.stringify(this.history));
+  },
+  deleteSearch: function (element) {
+    // remove elment from previous search list on button click
+  },
+};
+
 const weather = {
   lat: "",
   lon: "",
+  iconCode: "",
+  description: "",
   temp: "",
   humidity: "",
   windSpeed: "",
   uvIndex: "",
+  location: "",
 
   getGeoCode: async function (city) {
     const url = `http://api.openweathermap.org/geo/1.0/direct?q=${city}}&appid=${api_key}`;
@@ -98,10 +120,15 @@ const weather = {
       }
       const data = await response.json();
       console.log(data);
-      this.temp = data.main.temp; // kelvin
+      this.location = data.name;
+      this.iconCode = data.weather[0].icon;
+      this.description = data.weather[0].description;
+      this.temp = ((data.main.temp - 273.15) * 9) / 5 + 32; // kelvin to F
       this.humidity = data.main.humidity; // percent
       this.windSpeed = data.wind.speed; // mph
       this.uvIndex = ""; // UNKNOWN
+
+      this.renderCurrentWeather();
     } catch (error) {
       console.error(error);
     }
@@ -109,6 +136,14 @@ const weather = {
 
   renderCurrentWeather: async function () {
     // render to dom
+    cityEl.textContent = this.location;
+    dateEl.textContent = new Date().toJSON().slice(0, 10); //update
+    let iconUrl = `https://openweathermap.org/img/wn/${this.iconCode}@2x.png`;
+    weatherIconEl.src = iconUrl;
+    weatherIconEl.alt = this.description;
+    tempEl.textContent = ` ${this.temp.toFixed(0)} °F`;
+    humidityEl.textContent = ` ${this.humidity} %`;
+    windSpeedEl.textContent = ` ${this.windSpeed} mph`;
   },
 };
 
@@ -137,6 +172,7 @@ submitBtn.addEventListener("click", async (event) => {
     } else if (numberPresent) {
       throw Error("You have invalid numbers in your city input");
     }
+    searches.appendHistory(targetCity);
 
     const geoCode = await weather.getGeoCode(targetCity);
     weather.getCurrentWeather(geoCode);
