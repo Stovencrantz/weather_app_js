@@ -6,7 +6,7 @@
 
 // use geocoderAPI with city to get lat/lon data
 
-// Call the TODAY_WEATHER query w/ city
+// Call the TODAY_WEATHER query w/ lat/lon data
 // if valid -> pull weather icon, temp, humidity, windSpped, and uvIndex data
 // render to today dashboard
 
@@ -64,17 +64,39 @@ const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 const api_key = localStorage.getItem("openweather_key");
 
 const searches = {
-  history: [],
+  history: localStorage.getItem("searchHistory"),
   getHistory: function () {
     // get previous searches & render on load
+    console.log("Calling getHistory()");
+    if (this.history) {
+      this.history.map((city) => {
+        pastSearchesEl.replaceChildren("");
+        let listItem = document.createElement("li");
+        listItem.textContent = city;
+        listItem.setAttribute(
+          "class",
+          "list-group-item list-group-item-action hover"
+        );
+        listItem.setAttribute("data-city", city);
+        console.log("listItem: ", listItem);
+        pastSearchesEl.appendChild(listItem);
+      });
+    }
   },
   appendHistory: function (city) {
-    // append most recent search to localStorage
-    this.history.push(city);
-    localStorage.setItem("searchHistory", JSON.stringify(this.history));
+    // check if recent search is already present in this.history
+    if (!this.history || !this.history.includes(city)) {
+      console.log("Adding new search to history list");
+      // append most recent search to localStorage
+      localStorage.setItem("searchHistory", JSON.stringify([city]));
+      this.getHistory();
+    }
   },
   deleteSearch: function (element) {
     // remove elment from previous search list on button click
+  },
+  search: function () {
+    // api search the selected past city
   },
 };
 
@@ -86,7 +108,7 @@ const weather = {
   temp: "",
   humidity: "",
   windSpeed: "",
-  uvIndex: "",
+  windDir: "",
   location: "",
 
   getGeoCode: async function (city) {
@@ -145,7 +167,15 @@ const weather = {
     humidityEl.textContent = ` ${this.humidity} %`;
     windSpeedEl.textContent = ` ${this.windSpeed} mph`;
   },
+
+  search: async function (city) {
+    const geoCode = await weather.getGeoCode(city);
+    weather.getCurrentWeather(geoCode);
+  },
 };
+
+// init application with past searches
+searches.getHistory();
 
 submitBtn.addEventListener("click", async (event) => {
   event.preventDefault();
@@ -174,9 +204,16 @@ submitBtn.addEventListener("click", async (event) => {
     }
     searches.appendHistory(targetCity);
 
-    const geoCode = await weather.getGeoCode(targetCity);
-    weather.getCurrentWeather(geoCode);
+    weather.search(targetCity);
   } catch (error) {
     console.error(error);
+  }
+});
+
+pastSearchesEl.addEventListener("click", function (event) {
+  console.log(event.target.getAttribute("data-city"));
+  console.log(event.target.textContent);
+  if (event.target.getAttribute("data-city") === event.target.textContent) {
+    weather.search(event.target.getAttribute("data-city"));
   }
 });
