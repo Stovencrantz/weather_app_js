@@ -64,12 +64,17 @@ const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 const api_key = localStorage.getItem("openweather_key");
 
 const searches = {
-  history: localStorage.getItem("searchHistory"),
+  //=================
+  // fix this bullshit
+  //=================
+  history: [],
   getHistory: function () {
     // get previous searches & render on load
-    console.log("Calling getHistory()");
+    this.history.push(localStorage.getItem("searchHistory"));
+    console.log("Calling getHistory() => ", this.history);
+    // check localStorage for any previous searchHistory values
     if (this.history) {
-      this.history.map((city) => {
+      this.history.forEach((city) => {
         pastSearchesEl.replaceChildren("");
         let listItem = document.createElement("li");
         listItem.textContent = city;
@@ -84,11 +89,14 @@ const searches = {
     }
   },
   appendHistory: function (city) {
+    this.history = localStorage.getItem("searchHistory");
     // check if recent search is already present in this.history
     if (!this.history || !this.history.includes(city)) {
       console.log("Adding new search to history list");
+      this.history = [];
+      this.history.push(city);
       // append most recent search to localStorage
-      localStorage.setItem("searchHistory", JSON.stringify([city]));
+      localStorage.setItem("searchHistory", JSON.stringify(this.history));
       this.getHistory();
     }
   },
