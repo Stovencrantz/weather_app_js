@@ -70,12 +70,12 @@ const searches = {
   history: [],
   getHistory: function () {
     // get previous searches & render on load
-    this.history.push(localStorage.getItem("searchHistory"));
-    console.log("Calling getHistory() => ", this.history);
     // check localStorage for any previous searchHistory values
-    if (this.history) {
+    if (localStorage.getItem("searchHistory")) {
+      console.log("Calling getHistory() => ", this.history);
+      this.history = JSON.parse(localStorage.getItem("searchHistory")); //searchHistory should be array format already
+      pastSearchesEl.replaceChildren("");
       this.history.forEach((city) => {
-        pastSearchesEl.replaceChildren("");
         let listItem = document.createElement("li");
         listItem.textContent = city;
         listItem.setAttribute(
@@ -86,19 +86,25 @@ const searches = {
         console.log("listItem: ", listItem);
         pastSearchesEl.appendChild(listItem);
       });
+    } else {
+      console.log("nothing in storage");
     }
   },
   appendHistory: function (city) {
-    this.history = localStorage.getItem("searchHistory");
-    // check if recent search is already present in this.history
-    if (!this.history || !this.history.includes(city)) {
-      console.log("Adding new search to history list");
+    this.history = JSON.parse(localStorage.getItem("searchHistory"));
+    // if no valid searchHistory, initialize it
+    if (!this.history) {
       this.history = [];
       this.history.push(city);
-      // append most recent search to localStorage
-      localStorage.setItem("searchHistory", JSON.stringify(this.history));
-      this.getHistory();
     }
+    // validate that the city has not alreayd been searched
+    if (!this.history.includes(city)) {
+      console.log("Adding new search to history list");
+      this.history.push(city);
+      // append most recent search to localStorage
+    }
+    localStorage.setItem("searchHistory", JSON.stringify(this.history));
+    this.getHistory();
   },
   deleteSearch: function (element) {
     // remove elment from previous search list on button click
