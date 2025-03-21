@@ -83,7 +83,12 @@ const searches = {
           "list-group-item list-group-item-action hover"
         );
         listItem.setAttribute("data-city", city);
+        listItem.style = "display:flex; justify-content: space-between";
         console.log("listItem: ", listItem);
+        let delButton = document.createElement("button");
+        delButton.setAttribute("class", "btn btn-danger py-0 px-2");
+        delButton.textContent = "X";
+        listItem.appendChild(delButton);
         pastSearchesEl.appendChild(listItem);
       });
     } else {
@@ -231,3 +236,5 @@ pastSearchesEl.addEventListener("click", function (event) {
     weather.search(event.target.getAttribute("data-city"));
   }
 });
+
+// add on click event for pastSearches deleteButton to call searches.delete() method
