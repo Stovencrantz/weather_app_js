@@ -84,7 +84,6 @@ const searches = {
         );
         listItem.setAttribute("data-city", city);
         listItem.style = "display:flex; justify-content: space-between";
-        console.log("listItem: ", listItem);
         let delButton = document.createElement("button");
         delButton.setAttribute("class", "btn btn-danger py-0 px-2");
         delButton.textContent = "X";
@@ -231,8 +230,11 @@ submitBtn.addEventListener("click", async (event) => {
 
 pastSearchesEl.addEventListener("click", function (event) {
   console.log(event.target.getAttribute("data-city"));
-  console.log(event.target.textContent);
-  if (event.target.getAttribute("data-city") === event.target.textContent) {
+  console.log(event.target.childNodes[0].textContent);
+  if (
+    event.target.getAttribute("data-city") ===
+    event.target.childNodes[0].textContent
+  ) {
     weather.search(event.target.getAttribute("data-city"));
   }
 });
