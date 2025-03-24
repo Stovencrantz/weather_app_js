@@ -85,8 +85,6 @@ const searches = {
         listItem.setAttribute("data-city", city);
         listItem.style = "display:flex; justify-content: space-between";
         listItem.addEventListener("click", function (event) {
-          console.log(event.target.getAttribute("data-city"));
-          console.log(event.target.childNodes[0].textContent);
           // checks the text content only within list element matches its data-city value
           // if valid, we call the api using that past search
           if (
@@ -103,10 +101,9 @@ const searches = {
           console.log(event.target.parentNode.getAttribute("data-city"));
           if (event.target.tagName === "BUTTON") {
             // remove the list element where data-city matches the city the user wants to remove
-            console.log(
-              `Deleting ${event.target.parentNode.getAttribute("data-city")}`
+            searches.deleteSearch(
+              event.target.parentNode.getAttribute("data-city")
             );
-            console.log(searches.history);
           }
         });
         listItem.appendChild(delButton);
@@ -132,8 +129,14 @@ const searches = {
     localStorage.setItem("searchHistory", JSON.stringify(this.history));
     this.getHistory();
   },
-  deleteSearch: function (element) {
+  deleteSearch: function (listItem) {
     // remove elment from previous search list on button click
+    console.log("deleteSearch: ", listItem);
+    console.log("History before filter: ", this.history);
+    this.history = this.history.filter((city) => city !== listItem);
+    console.log("history after filter: ", this.history);
+    localStorage.setItem("searchHistory", JSON.stringify(this.history));
+    this.getHistory();
   },
   search: function () {
     // api search the selected past city
@@ -245,6 +248,7 @@ submitBtn.addEventListener("click", async (event) => {
     searches.appendHistory(targetCity);
 
     weather.search(targetCity);
+    document.getElementById("cityInput").value = "";
   } catch (error) {
     console.error(error);
   }
