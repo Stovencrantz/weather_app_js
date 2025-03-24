@@ -72,7 +72,6 @@ const searches = {
     // get previous searches & render on load
     // check localStorage for any previous searchHistory values
     if (localStorage.getItem("searchHistory")) {
-      console.log("Calling getHistory() => ", this.history);
       this.history = JSON.parse(localStorage.getItem("searchHistory")); //searchHistory should be array format already
       pastSearchesEl.replaceChildren("");
       this.history.forEach((city) => {
@@ -98,7 +97,6 @@ const searches = {
         delButton.setAttribute("class", "btn btn-danger py-0 px-2");
         delButton.textContent = "X";
         delButton.addEventListener("click", function (event) {
-          console.log(event.target.parentNode.getAttribute("data-city"));
           if (event.target.tagName === "BUTTON") {
             // remove the list element where data-city matches the city the user wants to remove
             searches.deleteSearch(
@@ -109,8 +107,6 @@ const searches = {
         listItem.appendChild(delButton);
         pastSearchesEl.appendChild(listItem);
       });
-    } else {
-      console.log("nothing in storage");
     }
   },
   appendHistory: function (city) {
@@ -131,15 +127,11 @@ const searches = {
   },
   deleteSearch: function (listItem) {
     // remove elment from previous search list on button click
-    console.log("deleteSearch: ", listItem);
-    console.log("History before filter: ", this.history);
+    //console.log("History before filter: ", this.history);
     this.history = this.history.filter((city) => city !== listItem);
-    console.log("history after filter: ", this.history);
+    //console.log("history after filter: ", this.history);
     localStorage.setItem("searchHistory", JSON.stringify(this.history));
     this.getHistory();
-  },
-  search: function () {
-    // api search the selected past city
   },
 };
 
@@ -165,7 +157,7 @@ const weather = {
       const data = await response.json();
       // search could yield cities from multiple countries
       // future feature to create popup to allow user to select between which country they want to procees with
-      console.log("data: ", data[0]);
+      //console.log("data: ", data[0]);
       this.lat = data[0].lat;
       this.lon = data[0].lon;
       console.trace(`lat: ${this.lat}, lon: ${this.lon}`);
@@ -184,7 +176,7 @@ const weather = {
         throw new Error(`Response status: ${response.status}`);
       }
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
       this.location = data.name;
       this.iconCode = data.weather[0].icon;
       this.description = data.weather[0].description;
@@ -211,9 +203,41 @@ const weather = {
     windSpeedEl.textContent = ` ${this.windSpeed} mph`;
   },
 
+  getFiveDayWeather: async function ({ lat, lon }) {
+    // fetch api data for 16 day api -> only return next 5 days
+    const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${api_key}`;
+
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log("five day: ", data);
+
+      this.renderFiveDayWeather();
+    } catch (error) {
+      console.error(error);
+    }
+  },
+
+  renderFiveDayWeather: async function () {
+    // render to dom
+    // cityEl.textContent = this.location;
+    // dateEl.textContent = new Date().toJSON().slice(0, 10); //update
+    // let iconUrl = `https://openweathermap.org/img/wn/${this.iconCode}@2x.png`;
+    // weatherIconEl.src = iconUrl;
+    // weatherIconEl.alt = this.description;
+    // tempEl.textContent = ` ${this.temp.toFixed(0)} °F`;
+    // humidityEl.textContent = ` ${this.humidity} %`;
+    // windSpeedEl.textContent = ` ${this.windSpeed} mph`;
+    console.log();
+  },
+
   search: async function (city) {
     const geoCode = await weather.getGeoCode(city);
     weather.getCurrentWeather(geoCode);
+    weather.getFiveDayWeather(geoCode);
   },
 };
 
@@ -255,8 +279,6 @@ submitBtn.addEventListener("click", async (event) => {
 });
 
 pastSearchesEl.addEventListener("click", function (event) {
-  console.log(event.target.getAttribute("data-city"));
-  console.log(event.target.childNodes[0].textContent);
   if (
     event.target.getAttribute("data-city") ===
     event.target.childNodes[0].textContent
