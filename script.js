@@ -213,14 +213,20 @@ const weather = {
         throw new Error(`Response status: ${response.status}`);
       }
       const data = await response.json();
-
-      this.renderFiveDayWeather(data);
+      // return a new list for all days following todays date
+      let currDate = new Date().toJSON().slice(0, 10);
+      let dateRange = data.list.filter(
+        (day) =>
+          day.dt_txt.split(" ")[0] !== currDate &&
+          day.dt_txt.split(" ")[1] === "12:00:00"
+      );
+      this.renderFiveDayWeather(dateRange);
     } catch (error) {
       console.error(error);
     }
   },
 
-  renderFiveDayWeather: async function (data) {
+  renderFiveDayWeather: async function (dates) {
     // render to dom
     // cityEl.textContent = this.location;
     // dateEl.textContent = new Date().toJSON().slice(0, 10); //update
@@ -230,14 +236,50 @@ const weather = {
     // tempEl.textContent = ` ${this.temp.toFixed(0)} °F`;
     // humidityEl.textContent = ` ${this.humidity} %`;
     // windSpeedEl.textContent = ` ${this.windSpeed} mph`;
-    console.trace("five day dat: ", data);
-    console.log(data.list);
-    // return a new list for all days following todays date
-    let currDate = new Date().toJSON().slice(0, 10);
-    let dateRange = data.list.filter(
-      (day) => day.dt_txt.split(" ")[0] !== currDate
-    );
-    console.trace(dateRange);
+    console.trace("five day date: ", dates);
+    fiveDayForecastRow.replaceChildren("");
+    dates.forEach((date) => {
+      // dynamically create a card element for each day
+      // =============================================
+      // <div class="card fiveDayCard">
+      // <h3 class="card-title">Date</h3>
+      // <p><i class="fas fa-solid fa-cloud"></i></p>
+      // <p class="card-text">Temp: 50</p>
+      // <p class="card-text">Humidity: 99</p>
+      // </div>
+      // =============================================
+      let dateCol = document.createElement("div");
+      dateCol.setAttribute("class", "col-lg-2 fiveDayCard");
+      let dateCard = document.createElement("div");
+      dateCard.setAttribute("class", "card fiveDayCard");
+      let dateH3 = document.createElement("h3");
+      dateH3.setAttribute("class", "card-title");
+      dateH3.textContent = date.dt_txt.split(" ")[0];
+      let pIcon = document.createElement("p");
+      let iconCode = date.weather[0].icon;
+      let iconEl = document.createElement("img");
+      let iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+      iconEl.src = iconUrl;
+      iconEl.alt = date.weather[0].description;
+      pIcon.appendChild(iconEl);
+
+      let pTemp = document.createElement("p");
+      pTemp.setAttribute("class", "card-text");
+      pTemp.textContent = `Temperature: ${(
+        ((date.main.temp - 273.15) * 9) / 5 +
+        32
+      ).toFixed(0)} °F`;
+      let pHumidity = document.createElement("p");
+      pHumidity.setAttribute("class", "card-text");
+      pHumidity.textContent = `Humidity: ${date.main.humidity} %`;
+
+      dateCard.appendChild(dateH3);
+      dateCard.appendChild(pIcon);
+      dateCard.appendChild(pTemp);
+      dateCard.appendChild(pHumidity);
+      dateCol.appendChild(dateCard);
+      fiveDayForecastRow.appendChild(dateCol);
+    });
   },
 
   search: async function (city) {
