@@ -84,9 +84,31 @@ const searches = {
         );
         listItem.setAttribute("data-city", city);
         listItem.style = "display:flex; justify-content: space-between";
+        listItem.addEventListener("click", function (event) {
+          console.log(event.target.getAttribute("data-city"));
+          console.log(event.target.childNodes[0].textContent);
+          // checks the text content only within list element matches its data-city value
+          // if valid, we call the api using that past search
+          if (
+            event.target.getAttribute("data-city") ===
+            event.target.childNodes[0].textContent
+          ) {
+            weather.search(event.target.getAttribute("data-city"));
+          }
+        });
         let delButton = document.createElement("button");
         delButton.setAttribute("class", "btn btn-danger py-0 px-2");
         delButton.textContent = "X";
+        delButton.addEventListener("click", function (event) {
+          console.log(event.target.parentNode.getAttribute("data-city"));
+          if (event.target.tagName === "BUTTON") {
+            // remove the list element where data-city matches the city the user wants to remove
+            console.log(
+              `Deleting ${event.target.parentNode.getAttribute("data-city")}`
+            );
+            console.log(searches.history);
+          }
+        });
         listItem.appendChild(delButton);
         pastSearchesEl.appendChild(listItem);
       });
