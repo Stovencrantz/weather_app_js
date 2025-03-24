@@ -160,7 +160,7 @@ const weather = {
       //console.log("data: ", data[0]);
       this.lat = data[0].lat;
       this.lon = data[0].lon;
-      console.trace(`lat: ${this.lat}, lon: ${this.lon}`);
+      //console.trace(`lat: ${this.lat}, lon: ${this.lon}`);
       return { lat: this.lat, lon: this.lon };
     } catch (error) {
       console.error(error.message);
@@ -213,15 +213,14 @@ const weather = {
         throw new Error(`Response status: ${response.status}`);
       }
       const data = await response.json();
-      console.log("five day: ", data);
 
-      this.renderFiveDayWeather();
+      this.renderFiveDayWeather(data);
     } catch (error) {
       console.error(error);
     }
   },
 
-  renderFiveDayWeather: async function () {
+  renderFiveDayWeather: async function (data) {
     // render to dom
     // cityEl.textContent = this.location;
     // dateEl.textContent = new Date().toJSON().slice(0, 10); //update
@@ -231,7 +230,14 @@ const weather = {
     // tempEl.textContent = ` ${this.temp.toFixed(0)} °F`;
     // humidityEl.textContent = ` ${this.humidity} %`;
     // windSpeedEl.textContent = ` ${this.windSpeed} mph`;
-    console.log();
+    console.trace("five day dat: ", data);
+    console.log(data.list);
+    // return a new list for all days following todays date
+    let currDate = new Date().toJSON().slice(0, 10);
+    let dateRange = data.list.filter(
+      (day) => day.dt_txt.split(" ")[0] !== currDate
+    );
+    console.trace(dateRange);
   },
 
   search: async function (city) {
