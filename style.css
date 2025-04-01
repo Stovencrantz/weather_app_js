@@ -9,10 +9,22 @@ body {
   height: 3rem;
   background-color: #767522;
   color: white;
+  font-size: xx-large;
+  font-family: Lily Script One, Helvetica, sans-serif;
 }
 
 form {
   display: block;
+}
+
+form label {
+  color: #767522;
+  font-weight: bold;
+  font-family: Winky Sans, Helvetica, sans-serif;
+}
+
+#pastSearches li {
+  font-family: Winky Sans, Helvetica, sans-serif;
 }
 
 .fiveDayCard {
@@ -21,4 +33,17 @@ form {
 
 .fiveDayCard .card-text {
   font-size: 0.85rem;
+}
+
+.lily-script-one-regular {
+  font-family: "Lily Script One", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.winky-sans-regular {
+  font-family: "Winky Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
 }

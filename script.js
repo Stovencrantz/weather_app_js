@@ -65,9 +65,6 @@ const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 const api_key = localStorage.getItem("openweather_key");
 
 const searches = {
-  //=================
-  // fix this bullshit
-  //=================
   history: [],
   getHistory: function () {
     // get previous searches & render on load
@@ -195,6 +192,7 @@ const weather = {
   renderCurrentWeather: async function () {
     // render to dom
     cityEl.textContent = this.location;
+    cityEl.style = "font-family: Winky Sans, serif; color: #767522";
     dateEl.textContent = new Date().toJSON().slice(0, 10); //update
     let iconUrl = `https://openweathermap.org/img/wn/${this.iconCode}@2x.png`;
     weatherIconEl.src = iconUrl;

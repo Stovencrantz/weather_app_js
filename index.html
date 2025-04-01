@@ -12,6 +12,12 @@
     <link rel="stylesheet"
     href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lily+Script+One&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/style.css" />
     <title>Weather App JS</title>
   </head>
@@ -68,25 +74,7 @@
             </div>
           </div>
           <div class="row my-3" id="fiveDayForecast">
-            <div class="col-lg-2">
-              <!-- 5 Day Forecast -->
-              <div class="card fiveDayCard">
-                <h3 class="card-title">Date</h3>
-                <p><i class="fas fa-solid fa-cloud"></i></p>
-                <p class="card-text">Temp: 50</p>
-                <p class="card-text">Humidity: 99</p>
-              </div>
-            </div>
-            <!--                -->
-            <div class="col-lg-2">
-              <!-- 5 Day Forecast -->
-              <div class="card">
-                <h3 class="card-title">Date</h3>
-                <p><i class="fas fa-solid fa-cloud"></i></p>
-                <p class="card-text">Temp: 50</p>
-                <p class="card-text">Humidity: 99</p>
-              </div>
-            </div>
+            <!-- Dynamically generated columns of cards -->
           </div>
         </div>
       </div>
