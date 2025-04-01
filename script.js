@@ -23,6 +23,7 @@ const weatherIconEl = document.getElementById("weatherIcon");
 const tempEl = document.getElementById("temp");
 const humidityEl = document.getElementById("humidity");
 const windSpeedEl = document.getElementById("windSpeed");
+const windDirEl = document.getElementById("windDir");
 const uvIndexEl = document.getElementById("uvIndex");
 const pastSearchesEl = document.getElementById("pastSearches");
 const fiveDayForecastRow = document.getElementById("fiveDayForecast");
@@ -176,14 +177,14 @@ const weather = {
         throw new Error(`Response status: ${response.status}`);
       }
       const data = await response.json();
-      //console.log(data);
+      console.log(data);
       this.location = data.name;
       this.iconCode = data.weather[0].icon;
       this.description = data.weather[0].description;
       this.temp = ((data.main.temp - 273.15) * 9) / 5 + 32; // kelvin to F
       this.humidity = data.main.humidity; // percent
       this.windSpeed = data.wind.speed; // mph
-      this.uvIndex = ""; // UNKNOWN
+      this.windDir = data.wind.deg; // deg
 
       this.renderCurrentWeather();
     } catch (error) {
@@ -201,6 +202,7 @@ const weather = {
     tempEl.textContent = ` ${this.temp.toFixed(0)} °F`;
     humidityEl.textContent = ` ${this.humidity} %`;
     windSpeedEl.textContent = ` ${this.windSpeed} mph`;
+    windDirEl.textContent = `${this.windDir} deg`;
   },
 
   getFiveDayWeather: async function ({ lat, lon }) {
@@ -249,12 +251,12 @@ const weather = {
       // </div>
       // =============================================
       let dateCol = document.createElement("div");
-      dateCol.setAttribute("class", "col-lg-2 fiveDayCard");
+      dateCol.setAttribute("class", "col");
       let dateCard = document.createElement("div");
-      dateCard.setAttribute("class", "card fiveDayCard");
-      let dateH3 = document.createElement("h3");
-      dateH3.setAttribute("class", "card-title");
-      dateH3.textContent = date.dt_txt.split(" ")[0];
+      dateCard.setAttribute("class", "card my-1 fiveDayCard");
+      let dateH6 = document.createElement("h6");
+      dateH6.setAttribute("class", "card-title");
+      dateH6.textContent = date.dt_txt.split(" ")[0];
       let pIcon = document.createElement("p");
       let iconCode = date.weather[0].icon;
       let iconEl = document.createElement("img");
@@ -273,7 +275,7 @@ const weather = {
       pHumidity.setAttribute("class", "card-text");
       pHumidity.textContent = `Humidity: ${date.main.humidity} %`;
 
-      dateCard.appendChild(dateH3);
+      dateCard.appendChild(dateH6);
       dateCard.appendChild(pIcon);
       dateCard.appendChild(pTemp);
       dateCard.appendChild(pHumidity);

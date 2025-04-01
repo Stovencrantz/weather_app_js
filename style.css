@@ -11,17 +11,14 @@ body {
   color: white;
 }
 
-.col {
-  border-style: solid;
-  border-color: black;
-  border-radius: 50px;
-  border-width: 5px;
-}
-
 form {
   display: block;
 }
 
 .fiveDayCard {
   padding: 1rem;
+}
+
+.fiveDayCard .card-text {
+  font-size: 0.85rem;
 }
