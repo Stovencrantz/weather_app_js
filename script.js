@@ -103,7 +103,7 @@ const searches = {
           }
         });
         listItem.appendChild(delButton);
-        //pastSearchesEl.appendChild(listItem);
+        // pastSearchesEl.appendChild(listItem);
         pastSearchesEl.prepend(listItem);
       });
     }
