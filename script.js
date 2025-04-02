@@ -145,7 +145,7 @@ const weather = {
   location: "",
 
   getGeoCode: async function (city) {
-    const url = `http://api.openweathermap.org/geo/1.0/direct?q=${city}}&appid=${api_key}`;
+    const url = `https://api.openweathermap.org/geo/1.0/direct?q=${city}}&appid=${api_key}`;
 
     try {
       const response = await fetch(url);
